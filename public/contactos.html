@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contactos</title>
+</head>
+<body>
+    <h1>Contactos</h1>
+    
+    <!-- Aquí se mostrará la lista de contactos -->
+    <div id="contactos">
+        <!-- JavaScript generará los elementos de contacto aquí -->
+    </div>
+
+    <script>
+        // JavaScript para cargar la lista de contactos desde el servidor y generar el contenido dinámicamente
+        fetch('/contactos-api') // Esta ruta debería manejar la obtención de los datos de contacto en formato JSON
+          .then(response => response.json())
+          .then(contactos => {
+            const contactosDiv = document.getElementById('contactos');
+            contactos.forEach(contacto => {
+              const contactoDiv = document.createElement('div');
+              contactoDiv.className = 'contacto';
+
+              const nombreHeading = document.createElement('h2');
+              nombreHeading.textContent = `Nombre: ${contacto.nombre}`;
+              contactoDiv.appendChild(nombreHeading);
+
+              const emailParrafo = document.createElement('p');
+              emailParrafo.textContent = `Email: ${contacto.email}`;
+              contactoDiv.appendChild(emailParrafo);
+
+              if (contacto.archivoAdjunto) {
+                const adjuntoLink = document.createElement('a');
+                adjuntoLink.href = `/descargar/${contacto.archivoAdjunto}`;
+                adjuntoLink.target = '_blank';
+                adjuntoLink.textContent = 'Descargar Archivo Adjunto';
+                contactoDiv.appendChild(adjuntoLink);
+              }
+
+              contactosDiv.appendChild(contactoDiv);
+            });
+          })
+          .catch(error => console.error(error));
+    </script>
+</body>
+</html>
